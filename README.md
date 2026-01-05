@@ -1,5 +1,10 @@
 # pmp-rosetta
 
+<p align="center">
+  <img src="media/bunny_init.png"width="400">
+  <img src="media/bunny_remeshed.png"width="400">
+</p>
+
 A port of the [PMP library](https://github.com/pmp-library/pmp-library) in Python using [rosetta](https://github.com/xaliphostes/rosetta).
 
 Soon (still using [rosetta](https://github.com/xaliphostes/rosetta)), binding in
@@ -53,6 +58,19 @@ From the root project
 ```sh
 python3.14 example.py
 ```
+
+### 5. Visualize
+From the root project
+(after installing **pyvista** using `pip install pyvista`)
+
+- Visualize the **init** Bunny
+    ```sh
+    python visualize_mesh.py bunny.obj
+    ```
+- Visualize the **remeshed** Bunny
+    ```sh
+    python visualize_mesh.py generated/python/build/remeshed_bunny.obj
+    ```
 
 ## 📜 License
 

@@ -1,0 +1,74 @@
+{
+    "variables": {
+        "ME": "/Users/fmaerten/devs/c++",
+        "ROSETTA_ROOT": "${ME}/rosetta",
+        "PMP_ROOT": "${ME}/pmp-rosetta/build/_deps/pmp-src"
+    },
+    
+    "project": {
+        "name": "pmp",
+        "version": "1.0.0",
+        "description": "Python bindings for PMP (Polygon Mesh Processing) library",
+        "author": "xaliphostes",
+        "license": "MIT"
+    },
+    
+    "rosetta": {
+        "registration_header": "bindings/pmp_registration.h",
+        "registration_function": "pmp_rosetta::register_all"
+    },
+    
+    "output_base_dir": "generated",
+
+    "sources": {
+        "mode": "static",
+        "base_dir": "${PMP_ROOT}/src",
+        "files": [],
+        "glob_patterns": [
+            "**/*.c^^"
+        ],
+        "exclude_patterns": [
+            "**/test/**",
+            "**/*_test.cpp",
+            "**/examples/**",
+            "**/main.cpp"
+        ]
+    },
+    "includes": {
+        "directories": [
+            "${PMP_ROOT}/src",
+            "${PMP_ROOT}/external/eigen-3.4.0",
+            "${ROSETTA_ROOT}/include"
+        ],
+        "headers": [],
+        "library_directories": [],
+        "libraries": []
+    },
+    
+    "targets": {
+        "python": {
+            "enabled": true,
+            "module_name": "pmp",
+            "output_dir": "",
+            "link_mode": "static",
+            "sources": {
+                "glob_patterns": ["pmp/io/*.cpp", "pmp/*.cpp", "pmp/algorithms/*.cpp"],
+                "exclude_patterns": ["**/test/**", "**/main.cpp"]
+            }
+        },
+        "wasm": {
+            "enabled": false,
+            "module_name": "pmp_wasm",
+            "output_dir": ""
+        },
+        "javascript": {
+            "enabled": false,
+            "module_name": "pmp_js",
+            "output_dir": ""
+        }
+    },
+    
+    "types": {
+        "namespace": "pmp"
+    }
+}

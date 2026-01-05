@@ -1,0 +1,17 @@
+venv*
+.venv*
+build
+generated
+dist
+pmp_*
+
+.DS_Store
+*.so
+*.dll
+*.dylib
+*.pyd
+
+python
+javascript
+wasm
+rest

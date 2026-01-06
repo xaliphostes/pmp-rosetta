@@ -29,7 +29,7 @@ This custom generator solves the problem by:
 2. Calling `pmp_rosetta::register_all()` **before** generating
 3. Now the generator finds all the classes and free functions.
    
-From the root project
+From the root project:
 ```sh
 mkdir build && cd build
 cmake ..
@@ -37,7 +37,7 @@ make
 ```
 
 ### 2. Generate the binding(s) using the generator
-From the root project
+From the root project:
 ```sh
 ./pmp_generator project.json
 ```
@@ -47,27 +47,29 @@ From the root project
 #### a. For Python:
 
 ##### Setup venv and install modules
-Go toi the `generated/python` folder.
+Go to the `generated/python` folder.
 
-Then create a virtual env:
+Then, create a virtual env and activate it:
 ```sh
 python2.14 -m venv venv214
 source ./venv214/bin/activate
+```
 
-# Install the necessary python modules for the GUI later one
+Install the necessary python modules for the GUI later one:
+```sh
 pip install pyvista pyvistaqt pyqt5 numpy
 ```
 
-##### Compile the python PMP lib
-Still from the python folder,
+##### Compile and install the python PMP lib
+Still from the python folder:
 ```sh
 pip install .
 ```
 
 ### 4. Testing
-Still from the python folder,
+From the root folder (for example):
 ```sh
-python ../../remesh_viewer.py
+python remesh_viewer.py
 ```
 
 ## 📜 License

@@ -48,6 +48,7 @@
     "targets": {
         "python": {
             "enabled": true,
+            "python_executable": "/Library/Frameworks/Python.framework/Versions/3.12",
             "module_name": "pmp",
             "output_dir": "",
             "link_mode": "static",

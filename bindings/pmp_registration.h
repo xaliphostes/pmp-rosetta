@@ -39,6 +39,16 @@
 // NOTE: Do NOT use "using namespace pmp;" here - we need fully qualified names
 // for the overload macros to generate correct code.
 
+// Copy a mesh in C++
+inline pmp::SurfaceMesh copy_mesh(const pmp::SurfaceMesh &src) {
+    return pmp::SurfaceMesh(src);
+}
+
+// Load mesh entirely in C++ (workaround for Python-created mesh issues)
+inline void load_mesh(pmp::SurfaceMesh &mesh, const std::filesystem::path &filepath) {
+    pmp::read(mesh, filepath);
+}
+
 namespace pmp_rosetta {
 
     inline void register_all() {
@@ -104,7 +114,31 @@ namespace pmp_rosetta {
             // Memory management
             .method("clear", &pmp::SurfaceMesh::clear)
             .method("reserve", &pmp::SurfaceMesh::reserve)
-            .method("garbage_collection", &pmp::SurfaceMesh::garbage_collection);
+            .method("garbage_collection", &pmp::SurfaceMesh::garbage_collection)
+            .lambda_method_const<std::vector<pmp::Scalar>>("vertices",
+                                                           [](const pmp::SurfaceMesh &self) {
+                                                               std::vector<pmp::Scalar> pos;
+                                                               pos.reserve(self.n_vertices() * 3);
+                                                               for (auto v : self.vertices()) {
+                                                                   const pmp::Point &p =
+                                                                       self.position(v);
+                                                                   pos.push_back(p[0]);
+                                                                   pos.push_back(p[1]);
+                                                                   pos.push_back(p[2]);
+                                                               }
+                                                               return pos;
+                                                           })
+            .lambda_method<std::vector<pmp::IndexType>>("indices",
+                                                        [](const pmp::SurfaceMesh &self) {
+                                                            std::vector<pmp::IndexType> indices;
+                                                            indices.reserve(self.n_faces() * 3);
+                                                            for (auto f : self.faces()) {
+                                                                for (auto v : self.vertices(f)) {
+                                                                    indices.push_back(v.idx());
+                                                                }
+                                                            }
+                                                            return indices;
+                                                        });
 
         // ========================================================================
         // Algorithms - Non-overloaded functions (simple registration)
@@ -185,6 +219,12 @@ namespace pmp_rosetta {
         // void read(SurfaceMesh& mesh, const std::filesystem::path& file)
         ROSETTA_REGISTER_OVERLOADED_FUNCTION(
             pmp::read, void (*)(pmp::SurfaceMesh &, const std::filesystem::path &));
+
+        // Load mesh entirely in C++ and return it
+        ROSETTA_REGISTER_FUNCTION(load_mesh);
+
+        // Copy mesh in C++
+        ROSETTA_REGISTER_FUNCTION(copy_mesh);
 
         // void write(const SurfaceMesh& mesh, const std::filesystem::path& file, const IOFlags&
         // flags)

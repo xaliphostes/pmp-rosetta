@@ -1,8 +1,7 @@
 # pmp-rosetta
 
 <p align="center">
-  <img src="media/bunny_init.png"width="400">
-  <img src="media/bunny_remeshed.png"width="400">
+  <img src="media/bunny.png"width="700">
 </p>
 
 A port of the [PMP library](https://github.com/pmp-library/pmp-library) in Python using [rosetta](https://github.com/xaliphostes/rosetta).
@@ -60,6 +59,10 @@ python3.14 example.py
 ```
 
 ### 5. Visualize
+
+**INFO**: Python >= 3.13 is not working yet with `pyvista` and `pmp`.
+Prefer to compile and use version 3.12.
+
 From the root project
 (after installing **pyvista** using `pip install pyvista`)
 

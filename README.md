@@ -4,9 +4,14 @@
   <img src="media/bunny.png"width="700">
 </p>
 
-A port of the [PMP library](https://github.com/pmp-library/pmp-library) in Python using [rosetta](https://github.com/xaliphostes/rosetta).
+A port of the [**PMP library**](https://github.com/pmp-library/pmp-library) in Python using [**rosetta**](https://github.com/xaliphostes/rosetta).
 
-Soon (still using [rosetta](https://github.com/xaliphostes/rosetta)), binding in
+✨ The **Polygon Mesh Processing** (PMP) Library is a modern C++ open-source library for processing and visualizing polygon surface meshes. It has an efficient and easy-to-use mesh data structure, as well as standard algorithms such as decimation, remeshing, subdivision, or smoothing.
+
+✨ **Rosetta** is a **non-intrusive C++ header-only introspection library** that is used to automatically generates consistent bindings for Python, JavaScript, Lua, Ruby, Julia and more — without modifying your C++ code.
+Describe your introspection once, and export them everywhere. You do not need to know anything about the underlaying libs that are used for the bindings (NAPI, Pybind11, Rice...)
+
+Soon (and still using [rosetta](https://github.com/xaliphostes/rosetta)), new bindings will be available in
 - **JavaScript**
 - **TypeScript**
 - **Wasm**
@@ -16,7 +21,14 @@ without any changes and with the same [*shared rosetta API*](bindings/pmp_regist
 
 ## Compile
 
-### 1. Make the generator executable
+### 1. Make the custom generator
+The standard `binding_generator` executable from `rosetta`  doesn't know about the project's classes. It queries `rosetta::Registry::instance()` at generation time, but the registry is empty because the `register_rosetta_classes()` function is never called.
+
+This custom generator solves the problem by:
+1. Including the `pmp_registration.h` (i.e., pmp rosetta registration of the given C++ lib)
+2. Calling `pmp_rosetta::register_all()` **before** generating
+3. Now the generator finds all the classes and free functions.
+   
 From the root project
 ```sh
 mkdir build && cd build
@@ -24,7 +36,7 @@ cmake ..
 make
 ```
 
-### 2. Generate the binding(s)
+### 2. Generate the binding(s) using the generator
 From the root project
 ```sh
 ./pmp_generator project.json
@@ -32,48 +44,31 @@ From the root project
 
 ### 3. Compile each binding
 
-#### For Python:
+#### a. For Python:
+
+##### Setup venv and install modules
+Go toi the `generated/python` folder.
+
+Then create a virtual env:
 ```sh
-cd generated
-mkdir build && cd build
-cmake ..
-make
+python2.14 -m venv venv214
+source ./venv214/bin/activate
+
+# Install the necessary python modules for the GUI later one
+pip install pyvista pyvistaqt pyqt5 numpy
 ```
-or (after creating a venv with activation)
+
+##### Compile the python PMP lib
+Still from the python folder,
 ```sh
 pip install .
 ```
 
-### 4. Testing the Python binding
-
-#### From the build directory
+### 4. Testing
+Still from the python folder,
 ```sh
-cp ../../../example.py .
-python3.14 example.py # because I used Python version 3.14 to generate the lib
+python ../../remesh_viewer.py
 ```
-
-#### Or from anywhere if using `pip install .`
-From the root project
-```sh
-python3.14 example.py
-```
-
-### 5. Visualize
-
-**INFO**: Python >= 3.13 is not working yet with `pyvista` and `pmp`.
-Prefer to compile and use version 3.12.
-
-From the root project
-(after installing **pyvista** using `pip install pyvista`)
-
-- Visualize the **init** Bunny
-    ```sh
-    python visualize_mesh.py bunny.obj
-    ```
-- Visualize the **remeshed** Bunny
-    ```sh
-    python visualize_mesh.py generated/python/build/remeshed_bunny.obj
-    ```
 
 ## 📜 License
 

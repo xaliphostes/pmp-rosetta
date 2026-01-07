@@ -1,10 +1,10 @@
 {
     "variables": {
-        "ME": "/Users/fmaerten/devs/c++",
-        "ROSETTA_ROOT": "${ME}/rosetta",
-        "PMP_ROOT": "${ME}/pmp-rosetta/build/_deps/pmp-src"
+        "BUILD_DIR": "build",
+        "ROSETTA_ROOT": "${BUILD_DIR}/_deps/rosetta-src",
+        "PMP_ROOT": "${BUILD_DIR}/_deps/pmp-src"
     },
-    
+
     "project": {
         "name": "pmp",
         "version": "1.0.0",
@@ -12,12 +12,12 @@
         "author": "xaliphostes",
         "license": "MIT"
     },
-    
+
     "rosetta": {
         "registration_header": "bindings/pmp_registration.h",
         "registration_function": "pmp_rosetta::register_all"
     },
-    
+
     "output_base_dir": "generated",
 
     "sources": {
@@ -25,7 +25,7 @@
         "base_dir": "${PMP_ROOT}/src",
         "files": [],
         "glob_patterns": [
-            "**/*.c^^"
+            "**/*.cpp"
         ],
         "exclude_patterns": [
             "**/test/**",

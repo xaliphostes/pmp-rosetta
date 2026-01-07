@@ -29,14 +29,31 @@ option(PMP_BUILD_DOCS "Build PMP documentation" OFF)
 # ============================================================================
 # Paths - adjust these to your structure
 # ============================================================================
-message("${CMAKE_CURRENT_SOURCE_DIR}")
-set(ROSETTA_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../rosetta/include")
-set(BINDING_GENERATOR_DIR "${CMAKE_CURRENT_SOURCE_DIR}/generator")
+# set(ROSETTA_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../rosetta/include")
+# set(BINDING_GENERATOR_DIR "${CMAKE_CURRENT_SOURCE_DIR}/generator")
 
 # ============================================================================
 # FetchContent for dependencies
 # ============================================================================
 include(FetchContent)
+
+# ----------------------------------------------------------------------------
+# Rosetta Library
+# ----------------------------------------------------------------------------
+message(STATUS "Fetching Rosetta library...")
+FetchContent_Declare(
+    rosetta
+    GIT_REPOSITORY https://github.com/xaliphostes/rosetta.git
+    GIT_TAG        main
+    GIT_SHALLOW    TRUE
+)
+
+# Disable Rosetta unit tests
+set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
+
+FetchContent_MakeAvailable(rosetta)
+FetchContent_GetProperties(rosetta SOURCE_DIR ROSETTA_SOURCE_DIR)
+set(ROSETTA_INCLUDE_DIR "${ROSETTA_SOURCE_DIR}/include")
 
 # ----------------------------------------------------------------------------
 # PMP Library
@@ -81,8 +98,6 @@ endif()
 # ============================================================================
 add_executable(pmp_generator
     main.cxx
-    # Add your Rosetta registration files here:
-    # bindings/pmp_registration.cxx
 )
 
 # Place the executable in a convenient location
